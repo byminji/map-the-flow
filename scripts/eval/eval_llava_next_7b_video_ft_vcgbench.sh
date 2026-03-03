@@ -1,0 +1,25 @@
+export CUDA_VISIBLE_DEVICES=0,1,2,3
+export OPENAI_API_KEY=... # your openai api key
+
+model_dir=workspace/models/LLaVA-NeXT-7B-Video-FT
+weight_dir=workspace/models/LLaVA-NeXT-7B-Video-FT
+
+# In case of using your own trained model,
+#model_dir=workspace/models/llava-v1.6-vicuna-7b-hf # base model path
+#weight_dir=workspace/models/your_finetuned_model   # finetuned model path
+
+SAVE_DIR=workspace/test_results/test_llava_next_7b_video_ft
+lora_alpha=0
+num_frames=8
+
+conv_mode=eval_vcgbench
+python -m tasks.eval.mvbench.pllava_eval_vcgbench \
+    --is_tvbench \
+    --conv_mode ${conv_mode} \
+    --pretrained_model_name_or_path ${model_dir} \
+    --save_path ${SAVE_DIR}/vcgbench \
+    --lora_alpha ${lora_alpha} \
+    --num_frames ${num_frames} \
+    --weight_dir ${weight_dir} \
+    --pooling_shape 8-12-12
+
